@@ -234,12 +234,6 @@ bun drizzle-kit generate
 bun drizzle-kit migrate
 ```
 
-### Scheduler not running
-
-Check console logs for:
-- Any error messages during ingestion
-- Network connectivity issues
-
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
