@@ -46,7 +46,7 @@ bun add -d @types/bun
 bun drizzle-kit generate
 ```
 
-This will create migration files in the `./drizzle` directory.
+This will cate migration files in the `./drizzle` dictory.
 
 ### 3. Run Migrations
 
@@ -73,7 +73,7 @@ Manually trigger article import from the sitemap.
 
 **Endpoint**: `POST /api/news/import`
 
-**Response**:
+**sponse**:
 ```json
 {
   "success": true,
@@ -95,7 +95,7 @@ Get articles with optional time filters and pagination.
 
 **Query Parameters**:
 - `after` (optional): ISO 8601 timestamp (e.g., `2024-01-01T00:00:00Z`)
-- `before` (optional): ISO 8601 timestamp
+- `befo` (optional): ISO 8601 timestamp
 - `page` (optional, default: 1): Page number
 - `limit` (optional, default: 10, max: 100): Items per page
 
@@ -168,7 +168,6 @@ The system handles errors gracefully:
 - **Invalid XML**: Returns error response with details
 - **Partial Failures**: Continues processing valid entries, logs failed ones
 - **Duplicate URLs**: Automatically updates existing entries
-- **Network Errors**: Retries on next scheduled run
 
 ## Configuration
 ```typescript
