@@ -5,6 +5,7 @@ A backend system that ingests news articles from an XML sitemap, stores them in 
 ## Features
 
 - 📰 **News Ingestion**: Fetch and parses news sitemaps
+- 🤖 **Automated Cron Jobs**: Hourly news ingestion via cron scheduler
 - 🔄 **Duplicate Prevention**: Uses URL hashing to avoid duplicate entries
 - ⏰ **Time-based Filtering**: Query articles by date ranges (after, before, between)
 - 📄 **Pagination Support**: Efficient pagination for large datasets
@@ -197,6 +198,79 @@ bun drizzle-kit check
 bun drizzle-kit drop
 ```
 
+## Automated News Ingestion (Cron Jobs)
+
+The system includes automated news ingestion that runs every hour to keep the database updated with the latest articles.
+
+### Quick Setup
+
+1. **Test the ingestion script**:
+```bash
+bun run scripts/ingest-news.ts
+```
+
+2. **Install the cron job**:
+```bash
+crontab -e
+# Add this line (update the path if needed):
+0 * * * * /Users/divyadarshan/Developer/GL1TCH/news-ingestion-backend/scripts/run-ingestion.sh
+```
+
+3. **Verify installation**:
+```bash
+crontab -l
+```
+
+### Cron Job Files
+
+- **`scripts/ingest-news.ts`** - Main ingestion script
+- **`scripts/run-ingestion.sh`** - Wrapper script with logging
+- **`logs/news-ingestion.log`** - Execution logs
+
+### Monitoring
+
+```bash
+# View real-time logs
+tail -f logs/news-ingestion.log
+
+# Check recent logs
+tail -n 50 logs/news-ingestion.log
+```
+
+### Cron Schedule Options
+
+The default schedule is hourly (`0 * * * *`). You can modify it in the crontab:
+
+```bash
+# Every 30 minutes
+*/30 * * * * /path/to/scripts/run-ingestion.sh
+
+# Every 6 hours
+0 */6 * * * /path/to/scripts/run-ingestion.sh
+
+# Daily at midnight
+0 0 * * * /path/to/scripts/run-ingestion.sh
+```
+
+### Removing the Cron Job
+
+```bash
+crontab -e
+# Delete the line containing the news ingestion command
+```
+
+### Manual Ingestion
+
+You can also manually trigger ingestion at any time:
+
+```bash
+# Direct execution
+bun run scripts/ingest-news.ts
+
+# Via wrapper script (with logging)
+./scripts/run-ingestion.sh
+```
+
 ## Testing the API
 
 Using `curl`:
@@ -223,6 +297,19 @@ If you get "database is locked" errors:
 - Make sure only one instance of the app is running
 - Close Drizzle Studio if open
 - Check for any other processes using `magnify.db`
+
+### Cron job not running
+
+```bash
+# Check if cron is running
+sudo launchctl list | grep cron
+
+# Check cron logs (macOS)
+log show --predicate 'process == "cron"' --last 1h
+
+# Test script manually
+bun run scripts/ingest-news.ts
+```
 
 ### Migrations not applying
 
